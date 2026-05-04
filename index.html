@@ -3,50 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ГОРОД RABOT — Биржа Бишкека</title>
+    <title>ГОРОД RABOT 🇰🇬</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; color: #333; }
-        .header { background: #0088cc; color: white; padding: 20px; text-align: center; border-radius: 0 0 20px 20px; }
-        .card { background: white; margin: 15px; padding: 20px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; box-sizing: border-box; }
-        .btn-order { background: #28a745; color: white; }
-        .btn-work { background: #ffc107; color: #333; }
-        .footer { text-align: center; font-size: 12px; color: #888; margin-top: 20px; padding-bottom: 20px; }
+        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 15px; }
+        .header { background: #0088cc; color: white; padding: 20px; text-align: center; border-radius: 15px; margin-bottom: 20px; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .btn-post { background: #28a745; color: white; }
+        .job-item { border-left: 5px solid #0088cc; padding: 10px; background: #f9f9f9; margin-top: 10px; border-radius: 5px; }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>ГОРОД RABOT 🇰🇬</h1>
-        <p>Бишкек: Заказывай всё — зарабатывай на всём</p>
+        <p>Бишкек: Сервис услуг и товаров</p>
     </div>
 
     <div class="card">
-        <h3>📢 Мне нужна услуга или товар</h3>
-        <p>Опишите, что нужно сделать. Укажите цену, которую вы готовы заплатить.</p>
-        <button class="btn btn-order" onclick="showNotice()">Опубликовать задание</button>
+        <h3>➕ Добавить задание или товар</h3>
+        <input type="text" id="title" placeholder="Что нужно? (Напр: Куплю велик)">
+        <input type="number" id="price" placeholder="Цена (сом)">
+        <textarea id="desc" placeholder="Подробности и ваш телефон"></textarea>
+        <button class="btn btn-post" onclick="sendToBot()">Опубликовать (Комиссия 15%)</button>
     </div>
 
     <div class="card">
-        <h3>💰 Я хочу заработать</h3>
-        <p>Посмотрите список активных заказов в Бишкеке и заберите в работу.</p>
-        <button class="btn btn-work" onclick="showNotice()">Лента заказов (Скоро)</button>
-    </div>
-
-    <div class="footer">
-        Комиссия сервиса: 10-15% | Поддержка: @2abdulaziza5
+        <h3>🔍 Лента объявлений</h3>
+        <div class="job-item">
+            <strong>Доставка Ошский базар</strong> — 300 сом<br>
+            <small>Нужно забрать овощи. Тел: 0555...</small>
+        </div>
+        <div class="job-item">
+            <strong>Продам iPhone 11</strong> — 25000 сом<br>
+            <small>Состояние идеал. Тел: 0707...</small>
+        </div>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        function showNotice() {
-            tg.showPopup({
-                title: 'В разработке',
-                message: 'Мы настраиваем базу данных. Скоро здесь появится форма для заполнения заказов!',
-                buttons: [{type: 'ok'}]
-            });
+        function sendToBot() {
+            let t = document.getElementById('title').value;
+            let p = document.getElementById('price').value;
+            let d = document.getElementById('desc').value;
+
+            if(!t || !p) { alert("Заполни название и цену!"); return; }
+
+            // Данные летят в бот
+            tg.sendData(JSON.stringify({title: t, price: p, desc: d}));
+            tg.close();
         }
     </script>
 </body>
